@@ -56,6 +56,13 @@ void OneButton::setPressTicks(int ticks) {
 } // setPressTicks
 
 
+// save function for start event
+void OneButton::attachStart(callbackFunction newFunction)
+{
+  _startFunc = newFunction;
+} // attachStart
+
+
 // save function for click event
 void OneButton::attachClick(callbackFunction newFunction)
 {
@@ -114,6 +121,7 @@ void OneButton::tick(void)
   // Implementation of the state machine
   if (_state == 0) { // waiting for menu pin being pressed.
     if (buttonLevel == _buttonPressed) {
+      if (_startFunc) _startFunc();
       _state = 1; // step to state 1
       _startTime = now; // remember starting time
       _lastStateChangeTime = now;
@@ -128,8 +136,8 @@ void OneButton::tick(void)
     } else if ((buttonLevel == _buttonPressed) && ((unsigned long)(now - _startTime) > _pressTicks)) {
       _isLongPressed = true;  // Keep track of long press state
       if (_pressFunc) _pressFunc();
-	  if (_longPressStartFunc) _longPressStartFunc();
-	  if (_duringLongPressFunc) _duringLongPressFunc();
+	    if (_longPressStartFunc) _longPressStartFunc();
+	    if (_duringLongPressFunc) _duringLongPressFunc();
       _state = 6; // step to state 6
       _lastStateChangeTime = now;     
     }
