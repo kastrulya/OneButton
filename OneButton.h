@@ -41,6 +41,7 @@ public:
   void setPressTicks(int ticks);
 
   // attach functions that will be called when button was pressed in the specified way.
+  void attachStart(callbackFunction newFunction);
   void attachClick(callbackFunction newFunction);
   void attachDoubleClick(callbackFunction newFunction);
   void attachPress(callbackFunction newFunction); // DEPRECATED, replaced by longPressStart, longPressStop and duringLongPress
@@ -67,6 +68,7 @@ private:
   bool _isLongPressed;
 
   // These variables will hold functions acting as event source.
+  callbackFunction _startFunc;
   callbackFunction _clickFunc;
   callbackFunction _doubleClickFunc;
   callbackFunction _pressFunc;
@@ -78,6 +80,7 @@ private:
   // They are initialized once on program start and are updated every time the tick function is called.
   int _state;
   unsigned long _startTime; // will be set in state 1
+  unsigned long _lastStateChangeTime; // the last time a state change occurs
 };
 
 #endif
